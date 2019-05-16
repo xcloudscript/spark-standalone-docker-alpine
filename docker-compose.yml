@@ -14,17 +14,41 @@ services:
       - "SPARK_MASTER_PORT=7077"
       - "SPARK_MASTER_WEBUI_PORT=8080"
     entrypoint: "/spark/start-master.sh"
-  spark-worker:
+  spark-worker-01:
     image: cloudscript/spark:latest
     depends_on:
       - spark-master
     ports:
-      - 8080
+      - 8081:8081
     networks:
       - spark-network
     environment:
       - "SPARK_MASTER=spark://spark-master:7077"
-      - "SPARK_WORKER_WEBUI_PORT=8080"
+      - "SPARK_WORKER_WEBUI_PORT=8081"
+    entrypoint: "/spark/start-worker.sh"
+  spark-worker-02:
+    image: cloudscript/spark:latest
+    depends_on:
+      - spark-master
+    ports:
+      - 8082:8082
+    networks:
+      - spark-network
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+      - "SPARK_WORKER_WEBUI_PORT=8082"
+    entrypoint: "/spark/start-worker.sh"
+  spark-worker-03:
+    image: cloudscript/spark:latest
+    depends_on:
+      - spark-master
+    ports:
+      - 8083:8083
+    networks:
+      - spark-network
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+      - "SPARK_WORKER_WEBUI_PORT=8083"
     entrypoint: "/spark/start-worker.sh"
 networks:
   spark-network:
